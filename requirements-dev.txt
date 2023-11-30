@@ -1,0 +1,7 @@
+black
+# https://stackoverflow.com/questions/73929564/entrypoints-object-has-no-attribute-get-digital-ocean
+importlib_metadata<5
+mypy
+pre-commit
+types-psutil
+wemake-python-styleguide
