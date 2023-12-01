@@ -139,6 +139,11 @@ tests:
   stage: tests
   variables:
     # Enables creation of a Docker network per build with the docker executor
+    HORIZON__DATABASE__URL: "postgresql+asyncpg://horizon:I8p4E2mULz6v@db:5432/horizon"
+    HORIZON__AUTH__ACCESS_TOKEN__SECRET_KEY: "bae1thahr8Iyaisai0kohvoh1aeg5quu"
+    HORIZON__AUTH__PROVIDER: "horizon.backend.providers.auth.dummy.DummyAuthProvider"
+    HORIZON__SERVER__LOGGING__PRESET: "colored"
+    HORIZON__SERVER__DEBUG: "false"
     FF_NETWORK_PER_BUILD: 1
   rules:
     # do not run tests after pushing git tag, code was already tested
@@ -148,12 +153,12 @@ tests:
   services:
   - name: central-mirror.services.mts.ru/postgres:15-alpine
     alias: db
-  - name: sregistry.mts.ru/onetools/bigdata/platform/onetools/horizon/backend:develop
+  - name: sregistry.mts.ru/onetools/bigdata/platform/onetools/horizon/backend:0.0.1
     alias: horizon
   script:
   - sed '/^$/d' ./.env.docker | sed '/^#/d' | sed 's/^/export /' > ./env
   - source ./env
-  - ./docker/wait-for-curl.sh -u http://horizon:8000/monitoring/ping
+  - ./docker/wait-for-curl.sh -u http://horizon:8000/monitoring/ping -t 200
   - pip install .
   - ./run_tests.sh
   # if Horizon backend is not ready, and timeout is reached, retry
@@ -164,30 +169,31 @@ tests:
     - ${CI_PROJECT_DIR}/reports
   interruptible: true
 
-coverage:
-  image: ${DEFAULT_IMAGE}:${CI_COMMIT_REF_SLUG}
-  stage: post tests
-  dependencies:
-  - tests
-  rules:
-  - if: $CI_COMMIT_TAG
-    when: never
-  - when: on_success
-  script:
-  - ./combine_coverage.sh
-  coverage: /TOTAL.*?(\d+\.?\d+)?%/
-  artifacts:
-    when: always
-    paths:
-    - ${CI_PROJECT_DIR}/reports
-    reports:
-      junit:
-      - ${CI_PROJECT_DIR}/reports/junit/*.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: ${CI_PROJECT_DIR}/reports/coverage.xml
-    expire_in: 7 days
-  interruptible: true
+# comment job until there are no files to upload
+#coverage:
+#  image: ${DEFAULT_IMAGE}:${CI_COMMIT_REF_SLUG}
+#  stage: post tests
+#  dependencies:
+#  - tests
+#  rules:
+#  - if: $CI_COMMIT_TAG
+#    when: never
+#  - when: on_success
+#  script:
+#  - ./combine_coverage.sh
+#  coverage: /TOTAL.*?(\d+\.?\d+)?%/
+#  artifacts:
+#    when: always
+#    paths:
+#    - ${CI_PROJECT_DIR}/reports
+#    reports:
+#      junit:
+#      - ${CI_PROJECT_DIR}/reports/junit/*.xml
+#      coverage_report:
+#        coverage_format: cobertura
+#        path: ${CI_PROJECT_DIR}/reports/coverage.xml
+#    expire_in: 7 days
+#  interruptible: true
 
 ### --------------- Build and publish docs --------------- ###
 build_docs:
