@@ -6,5 +6,6 @@
     :hidden:
 
     self
+    horizon-hwm-store
     security
     contributing

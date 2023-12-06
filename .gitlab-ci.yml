@@ -144,6 +144,9 @@ tests:
     HORIZON__AUTH__PROVIDER: "horizon.backend.providers.auth.dummy.DummyAuthProvider"
     HORIZON__SERVER__LOGGING__PRESET: "colored"
     HORIZON__SERVER__DEBUG: "false"
+    POSTGRES_DB: "horizon"
+    POSTGRES_USER: "horizon"
+    POSTGRES_PASSWORD: "I8p4E2mULz6v"
     FF_NETWORK_PER_BUILD: 1
   rules:
     # do not run tests after pushing git tag, code was already tested
@@ -169,31 +172,31 @@ tests:
     - ${CI_PROJECT_DIR}/reports
   interruptible: true
 
-# comment job until there are no files to upload
-#coverage:
-#  image: ${DEFAULT_IMAGE}:${CI_COMMIT_REF_SLUG}
-#  stage: post tests
-#  dependencies:
-#  - tests
-#  rules:
-#  - if: $CI_COMMIT_TAG
-#    when: never
-#  - when: on_success
-#  script:
-#  - ./combine_coverage.sh
-#  coverage: /TOTAL.*?(\d+\.?\d+)?%/
-#  artifacts:
-#    when: always
-#    paths:
-#    - ${CI_PROJECT_DIR}/reports
-#    reports:
-#      junit:
-#      - ${CI_PROJECT_DIR}/reports/junit/*.xml
-#      coverage_report:
-#        coverage_format: cobertura
-#        path: ${CI_PROJECT_DIR}/reports/coverage.xml
-#    expire_in: 7 days
-#  interruptible: true
+
+coverage:
+  image: ${DEFAULT_IMAGE}:${CI_COMMIT_REF_SLUG}
+  stage: post tests
+  dependencies:
+  - tests
+  rules:
+  - if: $CI_COMMIT_TAG
+    when: never
+  - when: on_success
+  script:
+  - ./combine_coverage.sh
+  coverage: /TOTAL.*?(\d+\.?\d+)?%/
+  artifacts:
+    when: always
+    paths:
+    - ${CI_PROJECT_DIR}/reports
+    reports:
+      junit:
+      - ${CI_PROJECT_DIR}/reports/junit/*.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: ${CI_PROJECT_DIR}/reports/coverage.xml
+    expire_in: 7 days
+  interruptible: true
 
 ### --------------- Build and publish docs --------------- ###
 build_docs:
