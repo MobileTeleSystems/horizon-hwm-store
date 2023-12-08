@@ -17,7 +17,11 @@ from horizon_hwm_store import HorizonHWMStore
                 "hwm_store": {
                     "horizon": {
                         "api_url": "http://some.horizon.url",
-                        "auth": {"login": secrets.token_hex(), "password": secrets.token_hex()},
+                        "auth": {
+                            "type": "login_password",
+                            "login": secrets.token_hex(),
+                            "password": secrets.token_hex(),
+                        },
                         "namespace": secrets.token_hex(),
                     },
                 },

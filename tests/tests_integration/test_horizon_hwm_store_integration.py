@@ -33,6 +33,9 @@ def test_hwm_store_integration(hwm_store, hwm_delta, namespace_exists):
     assert hwm_store.get_hwm(hwm.name) == hwm
 
     hwm2 = hwm + delta
+    # until `.set_hwm()` is called, HWM changes are not send to store
+    assert hwm_store.get_hwm(hwm.name) == hwm
+
     hwm_store.set_hwm(hwm2)
     assert hwm_store.get_hwm(hwm.name) == hwm2
 
