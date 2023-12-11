@@ -45,16 +45,17 @@ class HorizonHWMStore(BaseHWMStore):
     namespace : str
         The namespace under which the HWMs will be stored and managed.
 
-
     Examples
     --------
+
+    Prepare
+
     .. code:: python
 
         from onetl.connection import Hive, Postgres
         from onetl.core import DBReader
         from onetl.strategy import IncrementalStrategy
         from horizon.client.auth import LoginPassword
-        from horizon_hwm_store import HorizonHWMStore
 
         spark = ...
 
@@ -70,18 +71,50 @@ class HorizonHWMStore(BaseHWMStore):
 
         reader = DBReader(
             connection=postgres,
-            table="public.mydata",
+            source="public.mydata",
             columns=["id", "data"],
-            hwm=DBReader.AutoDetectHWM(hwm="some_unique_hwm_name", column="id"),
+            hwm=DBReader.AutoDetectHWM(hwm="some_unique_hwm_name", expression="id"),
         )
 
-        writer = DBWriter(connection=hive, table="newtable")
+        writer = DBWriter(connection=hive, target="newtable")
+
+    Use HorizonHWMStore class:
+
+    .. code:: python
+
+        from horizon_hwm_store import HorizonHWMStore
 
         with HorizonHWMStore(
             url="http://horizon-server.domain",
             auth=LoginPassword(login="ldap_login", password="ldap_password"),
             namespace="namespace",
         ):
+            with IncrementalStrategy():
+                df = reader.run()
+                writer.run(df)
+
+        # will store HWM value in Horizon
+
+    Use ``@detect_hwm_store`` class:
+
+    .. code:: yaml
+
+        hwm_store:
+            horizon:
+                api_url: http://horizon-server.domain
+                namespace: namespace
+                auth:
+                    type: login_password
+                    login: ldap_login
+                    password: ldap_password
+
+    .. code:: python
+
+        from etl_entities.hwm_store import detect_hwm_store
+
+        config = ...  # use @hydra.main decorator or read YAML file manually
+
+        with detect_hwm_store(config, key="hwm_store"):
             with IncrementalStrategy():
                 df = reader.run()
                 writer.run(df)
@@ -105,8 +138,10 @@ class HorizonHWMStore(BaseHWMStore):
         if hwm_id is None:
             return None
 
-        hwm_data = self._client.get_hwm(hwm_id)
-        return HWMTypeRegistry.parse(hwm_data.dict())
+        hwm = self._client.get_hwm(hwm_id)
+        hwm_data = hwm.dict(exclude={"id", "namespace_id", "changed_by", "changed_at"})
+        hwm_data["modified_time"] = hwm.changed_at
+        return HWMTypeRegistry.parse(hwm_data)
 
     def set_hwm(self, hwm: HWM) -> str:
         namespace_id = self._get_namespace_id()
