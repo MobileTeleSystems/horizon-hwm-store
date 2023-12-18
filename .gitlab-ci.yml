@@ -139,14 +139,14 @@ tests:
   stage: tests
   variables:
     # Enables creation of a Docker network per build with the docker executor
-    HORIZON__DATABASE__URL: "postgresql+asyncpg://horizon:I8p4E2mULz6v@db:5432/horizon"
-    HORIZON__AUTH__ACCESS_TOKEN__SECRET_KEY: "bae1thahr8Iyaisai0kohvoh1aeg5quu"
-    HORIZON__AUTH__PROVIDER: "horizon.backend.providers.auth.dummy.DummyAuthProvider"
-    HORIZON__SERVER__LOGGING__PRESET: "colored"
-    HORIZON__SERVER__DEBUG: "false"
-    POSTGRES_DB: "horizon"
-    POSTGRES_USER: "horizon"
-    POSTGRES_PASSWORD: "I8p4E2mULz6v"
+    HORIZON__DATABASE__URL: postgresql+asyncpg://horizon:I8p4E2mULz6v@db:5432/horizon
+    HORIZON__AUTH__ACCESS_TOKEN__SECRET_KEY: bae1thahr8Iyaisai0kohvoh1aeg5quu
+    HORIZON__AUTH__PROVIDER: horizon.backend.providers.auth.dummy.DummyAuthProvider
+    HORIZON__SERVER__LOGGING__PRESET: colored
+    HORIZON__SERVER__DEBUG: 'false'
+    POSTGRES_DB: horizon
+    POSTGRES_USER: horizon
+    POSTGRES_PASSWORD: I8p4E2mULz6v
     FF_NETWORK_PER_BUILD: 1
   rules:
     # do not run tests after pushing git tag, code was already tested
@@ -156,7 +156,7 @@ tests:
   services:
   - name: central-mirror.services.mts.ru/postgres:15-alpine
     alias: db
-  - name: sregistry.mts.ru/onetools/bigdata/platform/onetools/horizon/backend:0.0.1
+  - name: sregistry.mts.ru/onetools/bigdata/platform/onetools/horizon/backend:0.0.6
     alias: horizon
   script:
   - sed '/^$/d' ./.env.docker | sed '/^#/d' | sed 's/^/export /' > ./env
