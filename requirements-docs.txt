@@ -2,4 +2,5 @@ autodoc_pydantic
 numpydoc
 setuptools-git-versioning
 sphinx
+sphinx-favicon
 sphinx_rtd_theme>=1.0

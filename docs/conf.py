@@ -49,6 +49,7 @@ extensions = [
     "sphinx_rtd_theme",
     "sphinx.ext.autodoc",
     "sphinxcontrib.autodoc_pydantic",
+    "sphinx_favicon",
 ]
 numpydoc_show_class_members = True
 autodoc_pydantic_model_show_config = False
@@ -78,7 +79,11 @@ html_theme = "sphinx_rtd_theme"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = []
+html_static_path = ["_static"]
+html_logo = "./_static/logo.svg"
+favicons = [
+    {"rel": "icon", "href": "icon.svg", "type": "image/svg+xml"},
+]
 # The master toctree document.
 master_doc = "index"
 

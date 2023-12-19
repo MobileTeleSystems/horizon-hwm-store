@@ -1,7 +1,7 @@
 .. title
 
-What is horizon-hwm-store?
-==================
+What is Horizon HWM Store?
+==========================
 
 |Build Status| |Coverage| |Documentation| |PyPI|
 
@@ -13,9 +13,6 @@ What is horizon-hwm-store?
     :target: https://bigdata.pages.mts.ru/platform/onetools/horizon-hwm-store/
 .. |PyPI| image:: https://img.shields.io/badge/pypi-download-orange
     :target: https://artifactory.mts.ru/artifactory/own-onetl-pypi-local/horizon-hwm-store/
-
-
---------------------
 
 * ``horizon-hwm-store`` is a Python library to interact with Horizon service by saving and retrieving HWM.
 
