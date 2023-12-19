@@ -1,4 +1,4 @@
-autodoc_pydantic
+autodoc_pydantic<2
 numpydoc
 setuptools-git-versioning
 sphinx

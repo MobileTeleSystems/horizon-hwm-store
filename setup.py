@@ -67,7 +67,10 @@ setup(
         "Tracker": "https://jira.mts.ru/projects/DOP/issues",
     },
     keywords=["ETL", "Horizon", "HWM"],
-    entry_points={"onetl.plugins": ["horizon-hwm-store=horizon_hwm_store"]},
+    entry_points={
+        "etl_entities.plugins": ["horizon-hwm-store=horizon_hwm_store"],
+        "tricoder_package_spy.register": ["horizon-hwm-store=horizon_hwm_store"],
+    },
     packages=find_packages(exclude=["docs", "docs.*", "tests", "tests.*"]),
     python_requires=">=3.7",
     install_requires=requirements,
