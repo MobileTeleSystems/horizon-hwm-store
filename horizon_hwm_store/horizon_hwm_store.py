@@ -18,16 +18,15 @@ from pydantic import PrivateAttr
 @register_hwm_store_class("horizon")
 class HorizonHWMStore(BaseHWMStore):
     """
-    HorizonHWMStore is a class for storing and retrieving High Water Mark (HWM) values using the Horizon server.
-    This class allows for interactions with a Horizon server to manage HWM values within a specified namespace.
+    Fetch/store High Water Mark (HWM) values from the Horizon REST API.
 
     Parameters
-    -----------
+    ----------
     api_url : str
-        The base URL of the Horizon server.
+        The base URL of the Horizon REST API.
 
     auth : LoginPassword
-        An instance of a Horizon Auth class, such as `horizon.client.auth.LoginPassword`.
+        An instance of a Horizon Auth class, such as :obj:`LoginPassword <horizon.client.auth.LoginPassword>`.
 
     namespace : str
         The namespace under which the HWMs will be stored and managed.
@@ -35,14 +34,13 @@ class HorizonHWMStore(BaseHWMStore):
     Examples
     --------
 
-    Prepare
+    Preparation:
 
     .. code:: python
 
         from onetl.connection import Hive, Postgres
         from onetl.core import DBReader
         from onetl.strategy import IncrementalStrategy
-        from horizon.client.auth import LoginPassword
 
         spark = ...
 
@@ -65,14 +63,15 @@ class HorizonHWMStore(BaseHWMStore):
 
         writer = DBWriter(connection=hive, target="newtable")
 
-    Use HorizonHWMStore class:
+    Use raw ``HorizonHWMStore`` class:
 
     .. code:: python
 
         from horizon_hwm_store import HorizonHWMStore
+        from horizon.client.auth import LoginPassword
 
         with HorizonHWMStore(
-            url="http://horizon-server.domain",
+            url="http://horizon-server.domain/api",
             auth=LoginPassword(login="ldap_login", password="ldap_password"),
             namespace="namespace",
         ):
@@ -82,31 +81,39 @@ class HorizonHWMStore(BaseHWMStore):
 
         # will store HWM value in Horizon
 
-    Use ``@detect_hwm_store`` class:
+    Use ``@detect_hwm_store`` decorator:
 
-    .. code:: yaml
+    .. code-block:: yaml
+        :caption: conf/env/prod.yaml
 
         hwm_store:
             horizon:
-                api_url: http://horizon-server.domain
+                api_url: http://horizon-server.domain/api
                 namespace: namespace
                 auth:
                     type: login_password
                     login: ldap_login
                     password: ldap_password
 
-    .. code:: python
+    .. code-block:: python
+        :caption: pipelines/my_pipeline.py
+
+        import hydra
 
         from etl_entities.hwm_store import detect_hwm_store
 
-        config = ...  # use @hydra.main decorator or read YAML file manually
 
-        with detect_hwm_store(config, key="hwm_store"):
+        @hydra.main(config_path="../../conf", config_name="config")
+        @detect_hwm_store(config, key="hwm_store")
+        def main(config):
+            reader = DBReader(...)
+            writer = DBWriter(...)
+
             with IncrementalStrategy():
                 df = reader.run()
                 writer.run(df)
 
-        # will store HWM value in Horizon
+            # will create/update HWM value in Horizon
 
     """
 
