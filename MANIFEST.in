@@ -1,4 +1,4 @@
-include README.rst requirements.txt horizon-hwm-store/VERSION horizon-hwm-store/py.typed
+include README.rst requirements.txt horizon_hwm_store/VERSION horizon_hwm_store/py.typed
 recursive-exclude * __pycache__
 recursive-exclude * *.pyc
 recursive-exclude * *.pyo
