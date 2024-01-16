@@ -20,6 +20,10 @@ class HorizonHWMStore(BaseHWMStore):
     """
     Fetch/store High Water Mark (HWM) values from the Horizon REST API.
 
+    .. warning::
+
+        It is required to create namespace in Horizon BEFORE using this class.
+
     Parameters
     ----------
     api_url : str
