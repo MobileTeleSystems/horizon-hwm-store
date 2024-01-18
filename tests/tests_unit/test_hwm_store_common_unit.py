@@ -23,6 +23,8 @@ from horizon_hwm_store import HorizonHWMStore
                             "password": secrets.token_hex(),
                         },
                         "namespace": secrets.token_hex(),
+                        "retry": {"total": 10, "backoff_factor": 5},
+                        "timeout": {"request_timeout": 2},
                     },
                 },
             },

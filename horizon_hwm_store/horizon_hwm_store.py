@@ -5,14 +5,14 @@ from typing import Optional
 from etl_entities.hwm import HWM, HWMTypeRegistry
 from etl_entities.hwm_store import BaseHWMStore, register_hwm_store_class
 from horizon.client.auth import LoginPassword
-from horizon.client.sync import HorizonClientSync
+from horizon.client.sync import HorizonClientSync, RetryConfig, TimeoutConfig
 from horizon.commons.schemas.v1 import (
     HWMCreateRequestV1,
     HWMPaginateQueryV1,
     HWMUpdateRequestV1,
     NamespacePaginateQueryV1,
 )
-from pydantic import PrivateAttr
+from pydantic import Field, PrivateAttr
 
 
 @register_hwm_store_class("horizon")
@@ -73,11 +73,14 @@ class HorizonHWMStore(BaseHWMStore):
 
         from horizon_hwm_store import HorizonHWMStore
         from horizon.client.auth import LoginPassword
+        from horizon.client.sync import RetryConfig, TimeoutConfig
 
         with HorizonHWMStore(
-            url="http://horizon-server.domain/api",
+            api_url="http://horizon-server.domain/api",
             auth=LoginPassword(login="ldap_login", password="ldap_password"),
             namespace="namespace",
+            retry=RetryConfig(total=5),
+            timeout=TimeoutConfig(request_timeout=10),
         ):
             with IncrementalStrategy():
                 df = reader.run()
@@ -98,6 +101,10 @@ class HorizonHWMStore(BaseHWMStore):
                     type: login_password
                     login: ldap_login
                     password: ldap_password
+                retry:
+                    total: 5
+                timeout:
+                    request_timeout: 10
 
     .. code-block:: python
         :caption: pipelines/my_pipeline.py
@@ -124,11 +131,18 @@ class HorizonHWMStore(BaseHWMStore):
     api_url: str
     auth: LoginPassword
     namespace: str
+    retry: RetryConfig = Field(default_factory=RetryConfig)
+    timeout: TimeoutConfig = Field(default_factory=TimeoutConfig)
     _client: HorizonClientSync = PrivateAttr()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._client = HorizonClientSync(base_url=self.api_url, auth=self.auth)  # noqa: WPS601
+        self._client = HorizonClientSync(  # noqa: WPS601
+            base_url=self.api_url,
+            auth=self.auth,
+            retry=self.retry,
+            timeout=self.timeout,
+        )
 
     def get_hwm(self, name: str) -> Optional[HWM]:
         namespace_id = self._get_namespace_id()
