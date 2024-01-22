@@ -156,7 +156,7 @@ tests:
   services:
     - name: central-mirror.services.mts.ru/postgres:15-alpine
       alias: db
-    - name: sregistry.mts.ru/onetools/bigdata/platform/onetools/horizon/backend:0.0.6
+    - name: sregistry.mts.ru/onetools/bigdata/platform/onetools/horizon/backend:0.0.11
       alias: horizon
   script:
     - sed '/^$/d' ./.env.docker | sed '/^#/d' | sed 's/^/export /' > ./env
