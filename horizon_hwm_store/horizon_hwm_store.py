@@ -29,11 +29,17 @@ class HorizonHWMStore(BaseHWMStore):
     api_url : str
         The base URL of the Horizon REST API.
 
-    auth : LoginPassword
-        An instance of a Horizon Auth class, such as :obj:`LoginPassword <horizon.client.auth.LoginPassword>`.
+    auth : :obj:`LoginPassword <horizon.client.auth.LoginPassword>`
+        Auth credentials.
 
     namespace : str
         The namespace under which the HWMs will be stored and managed.
+
+    retry : :obj:`RetryConfig <horizon.client.sync.RetryConfig>`
+        Configuration for request retries.
+
+    timeout : :obj:`TimeoutConfig <horizon.client.sync.TimeoutConfig>`
+        Configuration for request timeouts.
 
     Examples
     --------
@@ -200,7 +206,7 @@ class HorizonHWMStore(BaseHWMStore):
         """
         namespaces = self._client.paginate_namespaces(NamespacePaginateQueryV1(name=self.namespace)).items
         if not namespaces:
-            raise RuntimeError(f"Namespace '{self.namespace}' not found. Please create it before using.")
+            raise RuntimeError(f"Namespace {self.namespace!r} not found. Please create it before using.")
         return namespaces[0].id
 
     def _get_hwm_id(self, namespace_id: int, hwm_name: str) -> Optional[int]:
