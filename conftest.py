@@ -92,7 +92,7 @@ def hwm_store():
 
 
 @pytest.fixture(scope="module")
-def namespace_exists():
+def ensure_namespace():
     from requests.exceptions import HTTPError
 
     store = HorizonHWMStore(

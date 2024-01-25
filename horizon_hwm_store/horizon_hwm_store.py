@@ -1,5 +1,7 @@
 # SPDX-FileCopyrightText: 2023-2024 MTS (Mobile Telesystems)
 # SPDX-License-Identifier: Apache-2.0
+from __future__ import annotations
+
 from typing import Optional
 
 from etl_entities.hwm import HWM, HWMTypeRegistry
@@ -29,16 +31,16 @@ class HorizonHWMStore(BaseHWMStore):
     api_url : str
         The base URL of the Horizon REST API.
 
-    auth : :obj:`LoginPassword <horizon.client.auth.LoginPassword>`
+    auth : :obj:`horizon.client.auth.LoginPassword`
         Auth credentials.
 
     namespace : str
         The namespace under which the HWMs will be stored and managed.
 
-    retry : :obj:`RetryConfig <horizon.client.sync.RetryConfig>`
+    retry : :obj:`horizon.client.sync.RetryConfig`
         Configuration for request retries.
 
-    timeout : :obj:`TimeoutConfig <horizon.client.sync.TimeoutConfig>`
+    timeout : :obj:`horizon.client.sync.TimeoutConfig`
         Configuration for request timeouts.
 
     Examples
@@ -140,6 +142,7 @@ class HorizonHWMStore(BaseHWMStore):
     retry: RetryConfig = Field(default_factory=RetryConfig)
     timeout: TimeoutConfig = Field(default_factory=TimeoutConfig)
     _client: HorizonClientSync = PrivateAttr()
+    _namespace_id: Optional[int] = PrivateAttr()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -149,6 +152,7 @@ class HorizonHWMStore(BaseHWMStore):
             retry=self.retry,
             timeout=self.timeout,
         )
+        self._namespace_id = None  # noqa: WPS601
 
     def get_hwm(self, name: str) -> Optional[HWM]:
         namespace_id = self._get_namespace_id()
@@ -178,7 +182,7 @@ class HorizonHWMStore(BaseHWMStore):
         # TODO: update response string after implementing UI
         return f"{self._client.base_url}/v1/hwm/{response.id}"
 
-    def check(self) -> None:
+    def check(self) -> HorizonHWMStore:
         """
         Perform a health check by making a request to the Horizon server.
 
@@ -187,8 +191,17 @@ class HorizonHWMStore(BaseHWMStore):
         will raise an error if the backend is unreachable, if incorrect credentials are provided,
         or if the user account is blocked.
 
+        Method also checks whether specified namespace exists, and raises exception if not.
+
+        Returns
+        -------
+        HorizonHWMStore
+            Self
+
         """
         self._client.whoami()
+        self._get_namespace_id()
+        return self
 
     def _get_namespace_id(self) -> int:
         """
@@ -204,10 +217,15 @@ class HorizonHWMStore(BaseHWMStore):
         RuntimeError
             If the namespace does not exist.
         """
+        if self._namespace_id is not None:
+            return self._namespace_id
+
         namespaces = self._client.paginate_namespaces(NamespacePaginateQueryV1(name=self.namespace)).items
         if not namespaces:
             raise RuntimeError(f"Namespace {self.namespace!r} not found. Please create it before using.")
-        return namespaces[0].id
+
+        self._namespace_id = namespaces[0].id  # noqa: WPS601
+        return self._namespace_id
 
     def _get_hwm_id(self, namespace_id: int, hwm_name: str) -> Optional[int]:
         """
