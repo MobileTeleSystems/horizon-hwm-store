@@ -143,7 +143,7 @@ tests:
   services:
     - name: central-mirror.services.mts.ru/postgres:15-alpine
       alias: db
-    - name: sregistry.mts.ru/onetools/bigdata/platform/onetools/horizon/backend:0.0.11
+    - name: sregistry.mts.ru/onetools/bigdata/platform/onetools/horizon/backend:0.0.12
       alias: horizon
   script:
     - sed '/^$/d' ./.env.docker | sed '/^#/d' | sed 's/^/export /' > ./env
@@ -157,6 +157,7 @@ tests:
     when: always
     paths:
       - ${CI_PROJECT_DIR}/reports
+    expire_in: 10 minutes
   interruptible: true
 
 
