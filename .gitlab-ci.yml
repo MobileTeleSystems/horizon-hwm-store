@@ -15,7 +15,6 @@ variables:
 
 stages:
   #- pre-commit
-  - build main image
   - static analysis
   - build test image
   - tests
@@ -68,21 +67,9 @@ workflow:
       when: never
     - when: always
 
-### --------------- Get VAULT SECRET --------------- ###
-## Переиспользование добавленного template'а по добавлению SSH-ключа пользователя ansible. ##
-devops_get_techuser_secrets:
-  extends: .base_vault_get_field
-  variables:
-    VAULT_ROLE_ID: $DEVOPS_VAULT_ROLE_ID
-    VAULT_SECRET_ID: $DEVOPS_VAULT_SECRET_ID
-    VAULT_PATH: platform/onetools/$CICD_USER_NAME
-    VAULT_FIELD: password
-    VARIABLE_NAME: CICD_USER_PASSWORD
-  interruptible: true
-
 build_docker_image:
   extends: .base_docker_build
-  stage: build main image
+  stage: .pre
   variables:
     CICD_DOCKER__IMAGE_TAG: ${CI_COMMIT_REF_SLUG}
     CICD_DOCKER__IMAGE_NAME: ${DEFAULT_IMAGE}
@@ -226,6 +213,18 @@ build_docs:
       - docs/html-*.tar.gz
     reports:
       dotenv: deploy.env
+    expire_in: 10 minutes
+  interruptible: true
+
+devops_get_techuser_secrets:
+  extends: .base_vault_get_field
+  stage: post tests
+  variables:
+    VAULT_ROLE_ID: $DEVOPS_VAULT_ROLE_ID
+    VAULT_SECRET_ID: $DEVOPS_VAULT_SECRET_ID
+    VAULT_PATH: platform/onetools/$CICD_USER_NAME
+    VAULT_FIELD: password
+    VARIABLE_NAME: CICD_USER_PASSWORD
   interruptible: true
 
 publish_docs:
