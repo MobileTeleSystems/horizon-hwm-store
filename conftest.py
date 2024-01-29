@@ -3,10 +3,16 @@
 import os
 import secrets
 from collections import namedtuple
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
 import pytest
-from etl_entities.hwm import ColumnDateHWM, ColumnDateTimeHWM, ColumnIntHWM, FileListHWM
+from etl_entities.hwm import (
+    ColumnDateHWM,
+    ColumnDateTimeHWM,
+    ColumnIntHWM,
+    FileListHWM,
+    KeyValueIntHWM,
+)
 from horizon.client.auth import LoginPassword
 from horizon.commons.schemas.v1 import NamespaceCreateRequestV1
 
@@ -31,7 +37,7 @@ HORIZON_NAMESPACE = os.environ.get("HORIZON_NAMESPACE")
                 expression=secrets.token_hex(5),
                 value=10,
             ),
-            5,
+            15,
         ),
         (
             ColumnIntHWM(
@@ -40,7 +46,7 @@ HORIZON_NAMESPACE = os.environ.get("HORIZON_NAMESPACE")
                 expression=secrets.token_hex(5),
                 value=10,
             ),
-            5,
+            15,
         ),
         (
             ColumnDateHWM(
@@ -49,7 +55,7 @@ HORIZON_NAMESPACE = os.environ.get("HORIZON_NAMESPACE")
                 expression=secrets.token_hex(5),
                 value=date(year=2023, month=8, day=15),
             ),
-            timedelta(days=31),
+            date(year=2023, month=9, day=15),  # + 1 month
         ),
         (
             ColumnDateTimeHWM(
@@ -58,7 +64,7 @@ HORIZON_NAMESPACE = os.environ.get("HORIZON_NAMESPACE")
                 expression=secrets.token_hex(5),
                 value=datetime(year=2023, month=8, day=15, hour=11, minute=22, second=33),
             ),
-            timedelta(seconds=50),
+            datetime(year=2023, month=8, day=15, hour=11, minute=23, second=33),  # + 1 minute
         ),
         (
             FileListHWM(
@@ -66,7 +72,7 @@ HORIZON_NAMESPACE = os.environ.get("HORIZON_NAMESPACE")
                 # no directory
                 value=["/some/file1", "/another/file2"],
             ),
-            "/more/file3",
+            ["/some/file1", "/another/file2", "/more/file3"],
         ),
         (
             FileListHWM(
@@ -74,11 +80,41 @@ HORIZON_NAMESPACE = os.environ.get("HORIZON_NAMESPACE")
                 directory="/absolute/path",
                 value=["/absolute/path/file1", "/absolute/path/file2"],
             ),
-            "/absolute/path/file3",
+            ["/absolute/path/file1", "/absolute/path/file2", "/absolute/path/file3"],
+        ),
+        (
+            KeyValueIntHWM(
+                name=f"{secrets.token_hex(5)}.{secrets.token_hex(5)}",
+                # no topic
+                expression="offset",
+                value={
+                    "0": 100,
+                    "1": 123,
+                },
+            ),
+            {
+                "0": 110,
+                "1": 150,
+            },
+        ),
+        (
+            KeyValueIntHWM(
+                name=f"{secrets.token_hex(5)}.{secrets.token_hex(5)}",
+                topic="topic_name",
+                expression="offset",
+                value={
+                    "0": 100,
+                    "1": 123,
+                },
+            ),
+            {
+                "0": 110,
+                "1": 150,
+            },
         ),
     ],
 )
-def hwm_delta(request):
+def hwm_new_value(request):
     return request.param
 
 
