@@ -1,5 +1,5 @@
 ARG PYTHON_VERSION=3.7
-FROM sregistry.mts.ru/bigdata/platform/docker-images/python:${PYTHON_VERSION}-slim as base
+FROM python:${PYTHON_VERSION}-slim as base
 ENV REQUESTS_CA_BUNDLE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 ENV CURL_CA_BUNDLE=$REQUESTS_CA_BUNDLE \
     SSL_CERT_FILE=$REQUESTS_CA_BUNDLE

@@ -120,13 +120,13 @@ context = {
     "version_slug": release,
     "versions": versions,
     "single_version": False,
-    "gitlab_host": "gitlab.services.mts.ru",
-    "gitlab_user": "bigdata/platform/onetools",
-    "gitlab_repo": "horizon-hwm-store",
-    "gitlab_version": version if on_tag else "master",
+    "github_host": "github.com",
+    "github_user": "MobileTeleSystems",
+    "github_repo": "horizon-hwm-store",
+    "github_version": version if on_tag else "master",
     "conf_py_path": "/docs/",  # префикс для путей к файлам
-    "display_gitlab": True,
-    "commit": head_sha[:8] if head_sha is not None else None,
+    "display_github": True,
+    "commit": head_sha[:7] if head_sha is not None else None,
 }
 
 if "html_context" in globals():

@@ -3,16 +3,22 @@
 What is Horizon HWM Store?
 ==========================
 
-|Build Status| |Coverage| |Documentation| |PyPI|
+|Repo Status| |PyPI| |PyPI License| |PyPI Python Version| |Documentation| |Build Status| |Coverage|
 
-.. |Build Status| image:: https://gitlab.services.mts.ru/bigdata/platform/onetools/horizon-hwm-store/badges/develop/pipeline.svg
-    :target: https://gitlab.services.mts.ru/bigdata/platform/onetools/horizon-hwm-store/-/pipelines
-.. |Coverage| image:: https://gitlab.services.mts.ru/bigdata/platform/onetools/horizon-hwm-store/badges/develop/coverage.svg
-    :target: https://gitlab.services.mts.ru/bigdata/platform/onetools/horizon-hwm-store/-/graphs/develop/charts
-.. |Documentation| image:: https://img.shields.io/badge/docs-latest-success
-    :target: https://bigdata.pages.mts.ru/platform/onetools/horizon-hwm-store/
+.. |Repo Status| image:: https://www.repostatus.org/badges/latest/active.svg
+    :target: https://github.com/MobileTeleSystems/horizon-hwm-store
 .. |PyPI| image:: https://img.shields.io/badge/pypi-download-orange
-    :target: https://artifactory.mts.ru/ui/native/own-onetl-pypi-local/horizon-hwm-store/
+    :target: https://pypi.org/project/horizon-hwm-store/
+.. |PyPI License| image:: https://img.shields.io/pypi/l/horizon-hwm-store.svg
+    :target: https://github.com/MobileTeleSystems/horizon-hwm-store/blob/develop/LICENSE.txt
+.. |PyPI Python Version| image:: https://img.shields.io/pypi/pyversions/horizon-hwm-store.svg
+    :target: https://badge.fury.io/py/horizon-hwm-store
+.. |Documentation| image:: https://readthedocs.org/projects/horizon-hwm-store/badge/?version=stable
+    :target: https://horizon-hwm-store.readthedocs.io/
+.. |Build Status| image:: https://github.com/MobileTeleSystems/horizon-hwm-store/workflows/Tests/badge.svg
+    :target: https://github.com/MobileTeleSystems/horizon-hwm-store/actions
+.. |Coverage| image:: https://codecov.io/gh/MobileTeleSystems/horizon-hwm-store/branch/develop/graph/badge.svg?token=RIO8URKNZJ
+    :target: https://codecov.io/gh/MobileTeleSystems/horizon-hwm-store
 
 * ``horizon-hwm-store`` is a Python library to interact with Horizon service by saving and retrieving HWM.
 
@@ -23,13 +29,7 @@ Requirements
 Documentation
 -------------
 
-See https://bigdata.pages.mts.ru/platform/onetools/horizon-hwm-store/
-
-Wiki page
--------------
-
-.. TDB
-.. See https://wiki.bd.msk.mts.ru/display/ONE/horizon-hwm-store
+See https://horizon-hwm-store.readthedocs.io/
 
 .. install
 
@@ -38,7 +38,7 @@ Installation
 
 .. code:: bash
 
-    pip install horizon-hwm-store --extra-index-url https://artifactory.mts.ru/artifactory/api/pypi/pip-bigdata/simple
+    pip install horizon-hwm-store
 
 .. develops
 
@@ -52,7 +52,7 @@ Clone repo:
 
 .. code:: bash
 
-    git clone git@gitlab.services.mts.ru:bigdata/platform/onetools/horizon-hwm-store.git -b develop
+    git clone https://github.com/MobileTeleSystems/horizon-hwm-store.git -b develop
 
     cd horizon-hwm-store
 
