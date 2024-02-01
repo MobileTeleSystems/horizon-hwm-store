@@ -45,7 +45,7 @@ setup(
     long_description_content_type="text/x-rst",
     license="Apache License 2.0",
     license_files=("LICENSE.txt",),
-    url="https://gitlab.services.mts.ru/bigdata/platform/onetools/horizon-hwm-store",
+    url="https://github.com/MobileTeleSystems/horizon-hwm-store",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Data engineers",
@@ -63,10 +63,10 @@ setup(
         "Typing :: Typed",
     ],
     project_urls={
-        "Documentation": "https://bigdata.pages.mts.ru/platform/onetools/horizon-hwm-store/",
-        "Source": "https://gitlab.services.mts.ru/bigdata/platform/onetools/horizon-hwm-store",
-        "CI/CD": "https://gitlab.services.mts.ru/bigdata/platform/onetools/horizion-hwm-store/-/pipelines",
-        "Tracker": "https://jira.mts.ru/projects/DOP/issues",
+        "Documentation": "https://horizon-hwm-store.readthedocs.io/",
+        "Source": "https://github.com/MobileTeleSystems/horizon-hwm-store",
+        "CI/CD": "https://github.com/MobileTeleSystems/horizon-hwm-store/actions",
+        "Tracker": "https://github.com/MobileTeleSystems/horizon-hwm-store/issues",
     },
     keywords=["ETL", "Horizon", "HWM"],
     entry_points={
