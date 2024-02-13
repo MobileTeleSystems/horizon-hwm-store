@@ -3,20 +3,18 @@
 What is Horizon HWM Store?
 ==========================
 
-|Repo Status| |PyPI| |PyPI License| |PyPI Python Version| |Documentation| |Build Status| |Coverage|
+|Repo Status| |Build Status| |PyPI License| |PyPI Python Version| |Documentation| |Coverage|
 
 .. |Repo Status| image:: https://www.repostatus.org/badges/latest/active.svg
     :target: https://github.com/MobileTeleSystems/horizon-hwm-store
-.. |PyPI| image:: https://img.shields.io/badge/pypi-download-orange
-    :target: https://pypi.org/project/horizon-hwm-store/
+.. |Build Status| image:: https://github.com/MobileTeleSystems/horizon-hwm-store/workflows/Tests/badge.svg
+    :target: https://github.com/MobileTeleSystems/horizon-hwm-store/actions
 .. |PyPI License| image:: https://img.shields.io/pypi/l/horizon-hwm-store.svg
     :target: https://github.com/MobileTeleSystems/horizon-hwm-store/blob/develop/LICENSE.txt
 .. |PyPI Python Version| image:: https://img.shields.io/pypi/pyversions/horizon-hwm-store.svg
     :target: https://badge.fury.io/py/horizon-hwm-store
 .. |Documentation| image:: https://readthedocs.org/projects/horizon-hwm-store/badge/?version=stable
     :target: https://horizon-hwm-store.readthedocs.io/
-.. |Build Status| image:: https://github.com/MobileTeleSystems/horizon-hwm-store/workflows/Tests/badge.svg
-    :target: https://github.com/MobileTeleSystems/horizon-hwm-store/actions
 .. |Coverage| image:: https://codecov.io/gh/MobileTeleSystems/horizon-hwm-store/branch/develop/graph/badge.svg?token=RIO8URKNZJ
     :target: https://codecov.io/gh/MobileTeleSystems/horizon-hwm-store
 
