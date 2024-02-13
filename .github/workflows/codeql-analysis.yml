@@ -51,10 +51,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -I -r requirements-dev.txt
-
-          # TODO: replace with  pip install -I -r requirements.txt -r requirements-dev.txt after DOP-11679
-
+          pip install -I -r requirements.txt -r requirements-dev.txt
 
       - name: Run flake8
         run: python3 -m flake8 --config setup.cfg .
