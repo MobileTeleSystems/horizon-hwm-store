@@ -16,7 +16,7 @@ services:
       retries: 3
 
   backend:
-    image: mtsrus/horizon-backend
+    image: mtsrus/horizon-backend:latest
     restart: unless-stopped
     env_file: .env.docker
     ports:
