@@ -1,0 +1,88 @@
+name: Code analysis
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches-ignore:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+env:
+  # flake8-commas is failing on Python 3.12
+  DEFAULT_PYTHON: '3.11'
+
+jobs:
+  linters:
+    name: Linters
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.DEFAULT_PYTHON }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-${{ env.DEFAULT_PYTHON }}-codeql-${{ hashFiles('requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-python-${{ env.DEFAULT_PYTHON }}-codeql-${{ hashFiles('requirements*.txt') }}
+            ${{ runner.os }}-python-${{ env.DEFAULT_PYTHON }}-codeql-
+            ${{ runner.os }}-python
+            ${{ runner.os }}-
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip setuptools wheel
+
+      - name: Install dependencies
+        run: |
+          pip install -I -r requirements.txt -r requirements-dev.txt
+
+      - name: Run flake8
+        run: python3 -m flake8 --config setup.cfg .
+
+      - name: Run mypy
+        run: python3 -m mypy --config-file setup.cfg horizon_hwm_store
+
+  codeql:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.DEFAULT_PYTHON }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+    # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: /language:python

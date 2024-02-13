@@ -12,4 +12,4 @@ python:
   install:
     - requirements: requirements-docs.txt
     - requirements: requirements-dev.txt
-  # - requirements: requirements.txt add after data-horizon release in pypi
+    - requirements: requirements.txt
