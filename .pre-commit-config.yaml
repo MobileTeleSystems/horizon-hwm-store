@@ -50,11 +50,6 @@ repos:
       - id: docker-compose-check
         files: ^docker-compose.*\.(yaml|yml)$
 
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
     hooks:
@@ -92,16 +87,37 @@ repos:
       - id: pyupgrade
         args: [--py37-plus, --keep-runtime-typing]
 
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.7.7
+    hooks:
+      - id: bandit
+        args:
+          - --aggregate=file
+          - -iii
+          - -ll
+        require_serial: true
+
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.1.1
+    rev: 24.2.0
     hooks:
       - id: black
-        language_version: python3
 
   - repo: https://github.com/asottile/blacken-docs
     rev: 1.16.0
     hooks:
       - id: blacken-docs
+        additional_dependencies:
+          - black==24.2.0
+
+  - repo: https://github.com/asottile/blacken-docs
+    rev: 1.16.0
+    hooks:
+      - id: blacken-docs
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
 
   - repo: meta
     hooks:
@@ -116,9 +132,17 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
+
       - id: mypy
         name: mypy
         entry: python3 -m mypy horizon_hwm_store
         language: system
         types: [python]
         pass_filenames: false
+
+ci:
+  skip:
+    - flake8 # checked with Github Actions
+    - mypy # checked with Github Actions
+    - docker-compose-check # cannot run on pre-commit.ci
+    - chmod # failing in pre-commit.ci
