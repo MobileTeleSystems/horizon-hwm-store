@@ -24,8 +24,8 @@ sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 # -- Project information -----------------------------------------------------
 
 project = "Horizon HWM Store"
-copyright = "2023-2024, DataOps.ETL Team"
-author = "DataOps.ETL Team"
+copyright = "2023-2024 MTS (Mobile Telesystems)"
+author = "DataOps.ETL"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
