@@ -1,5 +1,5 @@
 autodoc_pydantic<2
+furo
 numpydoc
 sphinx
 sphinx-favicon
-furo
