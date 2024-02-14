@@ -16,7 +16,6 @@ import subprocess
 import sys
 
 from packaging import version as Version
-from setuptools_git_versioning import get_all_tags, get_sha, get_tag
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
@@ -46,7 +45,6 @@ release = ver.public
 extensions = [
     "sphinx.ext.autosummary",
     "numpydoc",
-    "sphinx_rtd_theme",
     "sphinx.ext.autodoc",
     "sphinxcontrib.autodoc_pydantic",
     "sphinx_favicon",
@@ -74,8 +72,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
-
+html_theme = "furo"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
@@ -102,35 +99,3 @@ todo_include_todos = False
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = "my-project-doc"
-
-tags = {ver}
-tags.update(Version.parse(tag) for tag in get_all_tags())
-tags = [tag.public for tag in reversed(sorted(list(tags)))]
-
-versions = [("latest", "/latest/")]
-versions.extend([(tag, f"/{tag}/") for tag in tags])
-
-tag = get_tag()
-tag_sha = get_sha(tag)
-head_sha = get_sha("HEAD")
-on_tag = tag and head_sha is not None and head_sha == tag_sha
-
-context = {
-    "current_version": release,
-    "version_slug": release,
-    "versions": versions,
-    "single_version": False,
-    "github_host": "github.com",
-    "github_user": "MobileTeleSystems",
-    "github_repo": "horizon-hwm-store",
-    "github_version": version if on_tag else "master",
-    "conf_py_path": "/docs/",  # префикс для путей к файлам
-    "display_github": True,
-    "commit": head_sha[:7] if head_sha is not None else None,
-}
-
-if "html_context" in globals():
-    html_context.update(context)
-
-else:
-    html_context = context
