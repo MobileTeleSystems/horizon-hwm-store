@@ -42,7 +42,7 @@ setup(
     description="onETL Plugin for Horizon store",
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    license="Apache License 2.0",
+    license="Apache-2.0",
     license_files=("LICENSE.txt",),
     url="https://github.com/MobileTeleSystems/horizon-hwm-store",
     classifiers=[
