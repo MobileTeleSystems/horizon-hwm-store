@@ -11,20 +11,19 @@ here = Path(__file__).parent.resolve()
 
 
 def get_version():
-    if "CI_COMMIT_TAG" in os.environ:
-        return os.environ["CI_COMMIT_TAG"]
+    if os.getenv("GITHUB_REF_TYPE", "branch") == "tag":
+        return os.environ["GITHUB_REF_NAME"]
 
     version_file = here / "horizon_hwm_store" / "VERSION"
     version = version_file.read_text().strip()  # noqa: WPS410
 
-    build_num = os.environ.get("CI_PIPELINE_IID", "")
-    branch_name = os.environ.get("CI_COMMIT_REF_SLUG", "")
-    branches_protect = ["master", "develop"]
+    build_num = os.environ.get("GITHUB_RUN_ID", "0")
+    branch_name = os.environ.get("GITHUB_REF_NAME", "")
 
-    if not branch_name or branch_name in branches_protect:
-        return f"{version}.dev{build_num}"
+    if not branch_name:
+        return version
 
-    return f"{version}.dev{build_num}+{branch_name}"
+    return f"{version}.dev{build_num}"
 
 
 def parse_requirements(file: Path) -> list[str]:
@@ -45,10 +44,9 @@ setup(
     long_description_content_type="text/x-rst",
     license="Apache License 2.0",
     license_files=("LICENSE.txt",),
-    url="https://gitlab.services.mts.ru/bigdata/platform/onetools/horizon-hwm-store",
+    url="https://github.com/MobileTeleSystems/horizon-hwm-store",
     classifiers=[
         "Development Status :: 3 - Alpha",
-        "Intended Audience :: Data engineers",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
@@ -59,14 +57,15 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Libraries",
         "Typing :: Typed",
     ],
     project_urls={
-        "Documentation": "https://bigdata.pages.mts.ru/platform/onetools/horizon-hwm-store/",
-        "Source": "https://gitlab.services.mts.ru/bigdata/platform/onetools/horizon-hwm-store",
-        "CI/CD": "https://gitlab.services.mts.ru/bigdata/platform/onetools/horizion-hwm-store/-/pipelines",
-        "Tracker": "https://jira.mts.ru/projects/DOP/issues",
+        "Documentation": "https://horizon-hwm-store.readthedocs.io/",
+        "Source": "https://github.com/MobileTeleSystems/horizon-hwm-store",
+        "CI/CD": "https://github.com/MobileTeleSystems/horizon-hwm-store/actions",
+        "Tracker": "https://github.com/MobileTeleSystems/horizon-hwm-store/issues",
     },
     keywords=["ETL", "Horizon", "HWM"],
     entry_points={
