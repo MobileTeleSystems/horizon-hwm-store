@@ -14,8 +14,11 @@
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 from packaging import version as Version
+
+PROJECT_ROOT_DIR = Path(__file__).parent.parent.resolve()
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
@@ -48,6 +51,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinxcontrib.autodoc_pydantic",
     "sphinx_favicon",
+    "sphinxcontrib.towncrier",  # provides `towncrier-draft-entries` directive
 ]
 numpydoc_show_class_members = True
 autodoc_pydantic_model_show_config = False
@@ -99,3 +103,8 @@ todo_include_todos = False
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = "my-project-doc"
+
+
+towncrier_draft_autoversion_mode = "draft"
+towncrier_draft_include_empty = False
+towncrier_draft_working_directory = PROJECT_ROOT_DIR

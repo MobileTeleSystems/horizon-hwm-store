@@ -3,3 +3,5 @@ furo
 numpydoc
 sphinx
 sphinx-favicon
+sphinxcontrib-towncrier
+towncrier

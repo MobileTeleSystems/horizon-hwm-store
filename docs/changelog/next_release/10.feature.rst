@@ -1,0 +1,1 @@
+Add ``changelog`` section to documentation. Update contributing guide with full release process.

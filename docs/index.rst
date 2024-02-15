@@ -8,5 +8,6 @@
 
     self
     horizon-hwm-store
+    changelog
     security
     contributing
