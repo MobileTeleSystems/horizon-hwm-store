@@ -178,15 +178,11 @@ Before making a release from the ``develop`` branch, follow these steps:
 
 4. Remove content above the version number heading in the ``${VERSION}.rst`` file
 
-.. code:: bash
-
-    sed -i '' "0,/^.*towncrier release notes start/d" "docs/changelog/${VERSION}.rst"
-
 5. Update Changelog Index
 
 .. code:: bash
 
-    sed -i '' -E "s/DRAFT/DRAFT\n    ${VERSION}/" "docs/changelog/index.rst"
+    awk -v version=${VERSION} '/DRAFT/{print;print "    " version;next}1' docs/changelog/index.rst > temp && mv temp docs/changelog/index.rst
 
 6. Restore ``NEXT_RELEASE.rst`` file from backup
 

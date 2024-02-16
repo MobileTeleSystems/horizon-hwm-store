@@ -51,6 +51,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinxcontrib.autodoc_pydantic",
     "sphinx_favicon",
+    "sphinx_toolbox.github",
     "sphinxcontrib.towncrier",  # provides `towncrier-draft-entries` directive
 ]
 numpydoc_show_class_members = True
@@ -108,3 +109,6 @@ htmlhelp_basename = "my-project-doc"
 towncrier_draft_autoversion_mode = "draft"
 towncrier_draft_include_empty = False
 towncrier_draft_working_directory = PROJECT_ROOT_DIR
+
+github_username = "MobileTeleSystems"
+github_repository = "horizon-hwm-store"
