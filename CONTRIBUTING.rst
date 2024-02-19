@@ -279,6 +279,10 @@ Before making a release from the ``develop`` branch, follow these steps:
 
 4. Remove content above the version number heading in the ``${VERSION}.rst`` file
 
+.. code:: bash
+
+    awk '!/^.*towncrier release notes start/' "docs/changelog/${VERSION}.rst" > temp && mv temp "docs/changelog/${VERSION}.rst"
+
 5. Update Changelog Index
 
 .. code:: bash
