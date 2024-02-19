@@ -21,7 +21,7 @@ What is Horizon HWM Store?
 ``horizon-hwm-store`` is a Python library which implements `etl-entities' BaseHWMStore <https://etl-entities.readthedocs.io/en/stable/hwm_store/base_hwm_store.html>`_
 interface for `Horizon <https://data-horizon.readthedocs.io/>`_.
 
-Can be used by `onETL <https://onetl.readthedocs.io/>`_ for storing HWM values.
+Can be used by `onETL <https://onetl.readthedocs.io/en/stable/hwm_store/index.html>`_ for storing HWM values.
 
 Requirements
 ------------
