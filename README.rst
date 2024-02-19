@@ -18,11 +18,15 @@ What is Horizon HWM Store?
 .. |Coverage| image:: https://codecov.io/gh/MobileTeleSystems/horizon-hwm-store/branch/develop/graph/badge.svg?token=RIO8URKNZJ
     :target: https://codecov.io/gh/MobileTeleSystems/horizon-hwm-store
 
-* ``horizon-hwm-store`` is a Python library to interact with Horizon service by saving and retrieving HWM.
+``horizon-hwm-store`` is a Python library which implements `etl-entities' BaseHWMStore <https://etl-entities.readthedocs.io/en/stable/hwm_store/base_hwm_store.html>`_
+interface for `Horizon <https://data-horizon.readthedocs.io/>`_.
+
+Can be used by `onETL <https://onetl.readthedocs.io/>`_ for storing HWM values.
 
 Requirements
 ------------
-* **Python 3.7+**
+
+**Python 3.7+**
 
 Documentation
 -------------
@@ -37,86 +41,3 @@ Installation
 .. code:: bash
 
     pip install horizon-hwm-store
-
-.. develops
-
-Develop
--------
-
-Clone repo
-~~~~~~~~~~
-
-Clone repo:
-
-.. code:: bash
-
-    git clone https://github.com/MobileTeleSystems/horizon-hwm-store.git -b develop
-
-    cd horizon-hwm-store
-
-Setup environment
-~~~~~~~~~~~~~~~~~
-
-Create virtualenv and install dependencies:
-
-.. code:: bash
-
-    python -m venv venv
-    source venv/bin/activate
-    pip install -U wheel
-    pip install -U pip setuptools
-    pip install -U \
-        -r requirements.txt \
-        -r requirements-dev.txt \
-        -r requirements-docs.txt \
-        -r requirements-test.txt
-
-Enable pre-commit hooks
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Install pre-commit hooks:
-
-.. code:: bash
-
-    pre-commit install --install-hooks
-
-Test pre-commit hooks run:
-
-.. code:: bash
-
-    pre-commit run
-
-.. tests
-
-Tests
-~~~~~
-
-Start all containers with dependencies:
-
-.. code:: bash
-
-    docker-compose up -d
-
-Load environment variables with connection properties:
-
-.. code:: bash
-
-    source .env.local
-
-Run tests:
-
-.. code:: bash
-
-    ./run_tests.sh
-
-You can pass additional arguments, they will be passed to pytest:
-
-.. code:: bash
-
-    ./run_tests.sh -k sometest -lsx -vvvv --log-cli-level=INFO
-
-Stop all containers and remove created volumes:
-
-.. code:: bash
-
-    docker-compose down -v

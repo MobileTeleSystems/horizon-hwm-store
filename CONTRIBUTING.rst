@@ -6,23 +6,124 @@ reports, improving documentation, submitting feature requests, reviewing
 new submissions, or contributing code that can be incorporated into the
 project.
 
-Please, don't use the issue tracker for support questions. Instead use:
-`email <onetools@mts.ru>`__.
+Limitations
+-----------
 
-Feature Requests
-----------------
+We should keep close to these items during development:
 
-Please create a new GitHub issue for any significant changes and
-enhancements that you wish to make. Provide the feature you would like
-to see, why you need it, and how it will work. Discuss your ideas
-transparently and get community feedback before proceeding.
+* Some companies still use Python 3.7. So it is required to keep compatibility if possible.
 
-Significant Changes that you wish to contribute to the project should be
-discussed first in a GitHub issue that clearly outlines the changes and
-benefits of the feature.
+Initial setup for local development
+-----------------------------------
 
-Small Changes can directly be crafted and submitted to the GitHub
-Repository as a Pull Request.
+Install Git
+~~~~~~~~~~~
+
+Please follow `instruction <https://docs.github.com/en/get-started/quickstart/set-up-git>`_.
+
+Create a fork
+~~~~~~~~~~~~~
+
+If you are not a member of a development team building Horizon HWM Store, you should create a fork before making any changes.
+
+Please follow `instruction <https://docs.github.com/en/get-started/quickstart/fork-a-repo>`_.
+
+Clone the repo
+~~~~~~~~~~~~~~
+
+Open terminal and run these commands:
+
+.. code:: bash
+
+    git clone https://github.com/MobileTeleSystems/horizon-hwm-store -b develop
+
+    cd horizon-hwm-store
+
+Setup environment
+~~~~~~~~~~~~~~~~~
+
+Create virtualenv and install dependencies:
+
+.. code:: bash
+
+    python -m venv venv
+    source venv/bin/activate
+
+    pip install -U wheel
+    pip install -U pip setuptools
+
+    pip install -U \
+        -r requirements.txt \
+        -r requirements-dev.txt \
+        -r requirements-docs.txt \
+        -r requirements-test.txt
+
+Enable pre-commit hooks
+~~~~~~~~~~~~~~~~~~~~~~~
+
+`pre-commit <https://pre-commit.com/>`_ hooks allows to validate & fix repository content before making new commit.
+It allows to run linters, formatters, fix file permissions and so on. If something is wrong, changes cannot be committed.
+
+Firstly, install pre-commit hooks:
+
+.. code:: bash
+
+    pre-commit install --install-hooks
+
+Ant then test hooks run:
+
+.. code:: bash
+
+    pre-commit run
+
+How to
+------
+
+Start all containers with dependencies:
+
+.. code:: bash
+
+    docker-compose up -d
+
+Load environment variables with connection properties:
+
+.. code:: bash
+
+    source .env.local
+
+Run tests:
+
+.. code:: bash
+
+    ./run_tests.sh
+
+You can pass additional arguments, they will be passed to pytest:
+
+.. code:: bash
+
+    ./run_tests.sh -k sometest -lsx -vvvv --log-cli-level=INFO
+
+Stop all containers and remove created volumes:
+
+.. code:: bash
+
+    docker-compose down -v
+
+Build documentation
+~~~~~~~~~~~~~~~~~~~
+
+Build documentation using Sphinx:
+
+.. code:: bash
+
+    cd docs
+    make html
+
+If documentation should be build cleanly instead of reusing existing build result:
+
+.. code:: bash
+
+    make clean html
 
 Pull Request Process
 --------------------
