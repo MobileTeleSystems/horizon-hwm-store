@@ -46,8 +46,9 @@ release = ver.public
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autosummary",
     "numpydoc",
+    "sphinx_copybutton",
+    "sphinx.ext.autosummary",
     "sphinx.ext.autodoc",
     "sphinxcontrib.autodoc_pydantic",
     "sphinx_favicon",

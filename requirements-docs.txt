@@ -2,6 +2,7 @@ autodoc_pydantic<2
 furo
 numpydoc
 sphinx
+sphinx-copybutton
 sphinx-favicon
 sphinx-toolbox
 sphinxcontrib-towncrier
