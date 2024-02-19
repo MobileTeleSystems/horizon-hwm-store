@@ -1,7 +1,7 @@
 .. title
 
-What is Horizon HWM Store?
-==========================
+Horizon HWM Store
+=================
 
 |Repo Status| |PyPI| |PyPI License| |PyPI Python Version|
 |Build Status| |Documentation| |Coverage| |pre-commit.ci|
