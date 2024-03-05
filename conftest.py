@@ -138,7 +138,7 @@ def ensure_namespace():
     )
 
     try:
-        store._client.create_namespace(NamespaceCreateRequestV1(name=HORIZON_NAMESPACE))  # noqa: WPS437
+        store.client.create_namespace(NamespaceCreateRequestV1(name=HORIZON_NAMESPACE))  # noqa: WPS437
     except HTTPError:
         # exception: 409 Client Error: Conflict for url: http://horizon/v1/namespaces/ - namespace already exists
         pass

@@ -14,7 +14,16 @@ from horizon.commons.schemas.v1 import (
     HWMUpdateRequestV1,
     NamespacePaginateQueryV1,
 )
-from pydantic import Field, PrivateAttr
+
+try:
+    from pydantic.v1 import AnyHttpUrl, Field, PrivateAttr, validator
+except ImportError:
+    from pydantic import (  # type: ignore[no-redef, assignment]
+        AnyHttpUrl,
+        Field,
+        PrivateAttr,
+        validator,
+    )
 
 
 @register_hwm_store_class("horizon")
@@ -136,23 +145,24 @@ class HorizonHWMStore(BaseHWMStore):
 
     """
 
-    api_url: str
+    api_url: AnyHttpUrl
     auth: LoginPassword
     namespace: str
     retry: RetryConfig = Field(default_factory=RetryConfig)
     timeout: TimeoutConfig = Field(default_factory=TimeoutConfig)
-    _client: HorizonClientSync = PrivateAttr()
-    _namespace_id: Optional[int] = PrivateAttr()
+    _client: Optional[HorizonClientSync] = PrivateAttr(default=None)
+    _namespace_id: Optional[int] = PrivateAttr(default=None)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._client = HorizonClientSync(  # noqa: WPS601
-            base_url=self.api_url,
-            auth=self.auth,
-            retry=self.retry,
-            timeout=self.timeout,
-        )
-        self._namespace_id = None  # noqa: WPS601
+    @property
+    def client(self) -> HorizonClientSync:
+        if not self._client:
+            self._client = HorizonClientSync(  # noqa: WPS601
+                base_url=self.api_url,
+                auth=self.auth,
+                retry=self.retry,
+                timeout=self.timeout,
+            )
+        return self._client
 
     def get_hwm(self, name: str) -> Optional[HWM]:
         namespace_id = self._get_namespace_id()
@@ -160,7 +170,7 @@ class HorizonHWMStore(BaseHWMStore):
         if hwm_id is None:
             return None
 
-        hwm = self._client.get_hwm(hwm_id)
+        hwm = self.client.get_hwm(hwm_id)
         hwm_data = hwm.dict(exclude={"id", "namespace_id", "changed_by", "changed_at"})
         hwm_data["modified_time"] = hwm.changed_at
         return HWMTypeRegistry.parse(hwm_data)
@@ -174,13 +184,13 @@ class HorizonHWMStore(BaseHWMStore):
         hwm_id = self._get_hwm_id(namespace_id, hwm.name)  # type: ignore
         if hwm_id is None:
             create_request = HWMCreateRequestV1.parse_obj(hwm_dict)
-            response = self._client.create_hwm(create_request)
+            response = self.client.create_hwm(create_request)
         else:
             update_request = HWMUpdateRequestV1.parse_obj(hwm_dict)
-            response = self._client.update_hwm(hwm_id, update_request)
+            response = self.client.update_hwm(hwm_id, update_request)
 
         # TODO: update response string after implementing UI
-        return f"{self._client.base_url}/v1/hwm/{response.id}"
+        return f"{self.client.base_url}/v1/hwm/{response.id}"
 
     def check(self) -> HorizonHWMStore:
         """
@@ -199,9 +209,29 @@ class HorizonHWMStore(BaseHWMStore):
             Self
 
         """
-        self._client.whoami()
+        self.client.whoami()
         self._get_namespace_id()
         return self
+
+    # LoginPassword, RetryConfig and TimeoutConfig can be inherited from Pydantic v2 BaseModel
+    # which is detected by Pydantic v1 as arbitrary type. So we need to parse them manually.
+    @validator("auth", pre=True)
+    def _check_auth(cls, value: LoginPassword):
+        if not isinstance(value, LoginPassword):
+            return LoginPassword.parse_obj(value)
+        return value
+
+    @validator("retry", pre=True)
+    def _check_retry(cls, value: RetryConfig):
+        if not isinstance(value, RetryConfig):
+            return RetryConfig.parse_obj(value)
+        return value
+
+    @validator("timeout", pre=True)
+    def _check_timeout(cls, value: TimeoutConfig):
+        if not isinstance(value, TimeoutConfig):
+            return TimeoutConfig.parse_obj(value)
+        return value
 
     def _get_namespace_id(self) -> int:
         """
@@ -220,7 +250,7 @@ class HorizonHWMStore(BaseHWMStore):
         if self._namespace_id is not None:
             return self._namespace_id
 
-        namespaces = self._client.paginate_namespaces(NamespacePaginateQueryV1(name=self.namespace)).items
+        namespaces = self.client.paginate_namespaces(NamespacePaginateQueryV1(name=self.namespace)).items
         if not namespaces:
             raise RuntimeError(f"Namespace {self.namespace!r} not found. Please create it before using.")
 
@@ -244,5 +274,5 @@ class HorizonHWMStore(BaseHWMStore):
             The ID of the HWM, or None if it does not exist.
         """
         hwm_query = HWMPaginateQueryV1(namespace_id=namespace_id, name=hwm_name)
-        hwms = self._client.paginate_hwm(hwm_query).items
+        hwms = self.client.paginate_hwm(hwm_query).items
         return hwms[-1].id if hwms else None

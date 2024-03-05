@@ -1,4 +1,4 @@
-autodoc_pydantic<2
+autodoc_pydantic
 furo
 numpydoc
 sphinx
