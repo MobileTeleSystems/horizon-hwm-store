@@ -88,7 +88,7 @@ repos:
         args: [--py37-plus, --keep-runtime-typing]
 
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.7
+    rev: 1.7.8
     hooks:
       - id: bandit
         args:
