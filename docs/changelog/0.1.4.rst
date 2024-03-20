@@ -1,8 +1,4 @@
 0.1.4 (2024-02-14)
 ------------------
 
-Features
-^^^^^^^
-
-- Return ``Self`` in ``.check()`` method
-- Add ``KeyValueHWM`` support
+``horizon-hwm-store`` is now Open source
