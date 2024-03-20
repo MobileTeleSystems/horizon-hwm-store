@@ -10,7 +10,7 @@ exclude = '''(\.eggs|\.git|\.mypy_cache|\.tox|\.venv|_build|buck-out|build|dist)
 
 [tool.mypy]
 plugins = 'pydantic.mypy'
-python_version = 3.7
+python_version = 3.8
 follow_imports = "silent"
 ignore_missing_imports = true
 pretty = true
