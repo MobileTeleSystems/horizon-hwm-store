@@ -5,7 +5,6 @@
     :caption: horizon-hwm-store
     :hidden:
 
-    self
     horizon-hwm-store
     changelog
     security

@@ -1,0 +1,14 @@
+0.1.1 (2024-01-18)
+------------------
+
+Features
+^^^^^^^^^
+
+- Add ``RetryConfig``
+- Add ``TimeoutConfig``
+
+Improvements
+^^^^^^^^^^^^
+
+- Improve typing
+- Fix usage examples
