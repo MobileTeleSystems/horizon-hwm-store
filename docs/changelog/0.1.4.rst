@@ -1,0 +1,4 @@
+0.1.4 (2024-02-14)
+------------------
+
+``horizon-hwm-store`` is now Open source

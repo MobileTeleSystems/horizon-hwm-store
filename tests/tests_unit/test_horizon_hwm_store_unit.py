@@ -8,33 +8,42 @@ from horizon.client.auth import LoginPassword
 from horizon_hwm_store import HorizonHWMStore
 
 
-@pytest.mark.parametrize(
-    "username, password, auth, namespace, err_msg",
-    [
-        (
-            "user",
-            secrets.token_hex(),
-            True,
-            None,
-            "error for HorizonHWMStore\nnamespace\n  none is not an allowed value",
-        ),
-        (
-            "user",
-            secrets.token_hex(),
-            False,
-            secrets.token_hex(),
-            "HorizonHWMStore\nauth\n  none is not an allowed value",
-        ),
-        (None, None, True, secrets.token_hex(), "LoginPassword\nlogin\n  none is not an allowed value"),
-        ("user", None, True, secrets.token_hex(), " LoginPassword\npassword\n  none is not an allowed value"),
-    ],
-)
-def test_validation_errors(username, password, auth, namespace, err_msg):
-    with pytest.raises(ValueError, match=err_msg):
+def test_validation_errors():
+    with pytest.raises(ValueError, match="none is not an allowed value"):
         HorizonHWMStore(
             api_url="http://some.domain.com",
-            auth=LoginPassword(login=username, password=password) if auth else None,
-            namespace=namespace,
+            auth=LoginPassword(login="user", password=secrets.token_hex()),
+            namespace=None,
+        )
+
+    with pytest.raises(
+        ValueError,
+        match=".*(expected dict not NoneType|Input should be a valid dictionary or instance of LoginPassword).*",
+    ):
+        HorizonHWMStore(
+            api_url="http://some.domain.com",
+            auth=None,
+            namespace=secrets.token_hex(),
+        )
+
+    with pytest.raises(
+        ValueError,
+        match=".*(none is not an allowed value|Input should be a valid string).*",
+    ):
+        HorizonHWMStore(
+            api_url="http://some.domain.com",
+            auth=LoginPassword(login=None, password=secrets.token_hex()),
+            namespace=secrets.token_hex(),
+        )
+
+    with pytest.raises(
+        ValueError,
+        match=".*(none is not an allowed value|Input should be a valid string).*",
+    ):
+        HorizonHWMStore(
+            api_url="http://some.domain.com",
+            auth=LoginPassword(login="user", password=None),
+            namespace=secrets.token_hex(),
         )
 
 
@@ -59,12 +68,12 @@ def test_horizon_hwm_store_init(caplog):
             assert HWMStoreStackManager.get_current() == store
 
     assert "Using HorizonHWMStore as HWM Store" in caplog.text
-    assert "url = 'http://some.domain.com'" in caplog.text
+    assert "'http://some.domain.com'" in caplog.text
     assert "auth = " in caplog.text
     assert password not in caplog.text
 
 
-def test_horizon_hwm_no_schema(caplog):
+def test_horizon_hwm_no_schema():
     with pytest.raises(ValueError, match="invalid or missing URL scheme"):
         HorizonHWMStore(
             api_url="some.domain.com",

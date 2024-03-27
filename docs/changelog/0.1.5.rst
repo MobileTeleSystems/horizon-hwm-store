@@ -1,0 +1,8 @@
+0.1.5 (2024-03-27)
+==================
+
+Features
+--------
+
+- Add ``changelog`` section to documentation. Update contributing guide with full release process. (:github:pull:`10`)
+- Add Pydantic v2 support. (:github:pull:`14`)

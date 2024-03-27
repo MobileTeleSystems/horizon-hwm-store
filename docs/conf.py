@@ -14,9 +14,11 @@
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 from packaging import version as Version
-from setuptools_git_versioning import get_all_tags, get_sha, get_tag
+
+PROJECT_ROOT_DIR = Path(__file__).parent.parent.resolve()
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
@@ -24,8 +26,8 @@ sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 # -- Project information -----------------------------------------------------
 
 project = "Horizon HWM Store"
-copyright = "2023-2024, DataOps.ETL Team"
-author = "DataOps.ETL Team"
+copyright = "2023-2024 MTS (Mobile Telesystems)"
+author = "DataOps.ETL"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -44,12 +46,14 @@ release = ver.public
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autosummary",
     "numpydoc",
-    "sphinx_rtd_theme",
+    "sphinx_copybutton",
+    "sphinx.ext.autosummary",
     "sphinx.ext.autodoc",
     "sphinxcontrib.autodoc_pydantic",
     "sphinx_favicon",
+    "sphinx_toolbox.github",
+    "sphinxcontrib.towncrier",  # provides `towncrier-draft-entries` directive
 ]
 numpydoc_show_class_members = True
 autodoc_pydantic_model_show_config = False
@@ -74,12 +78,12 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
-
+html_theme = "furo"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+html_extra_path = ["robots.txt"]
 favicons = [
     {"rel": "icon", "href": "icon.svg", "type": "image/svg+xml"},
 ]
@@ -103,34 +107,10 @@ todo_include_todos = False
 # Output file base name for HTML help builder.
 htmlhelp_basename = "my-project-doc"
 
-tags = {ver}
-tags.update(Version.parse(tag) for tag in get_all_tags())
-tags = [tag.public for tag in reversed(sorted(list(tags)))]
 
-versions = [("latest", "/latest/")]
-versions.extend([(tag, f"/{tag}/") for tag in tags])
+towncrier_draft_autoversion_mode = "draft"
+towncrier_draft_include_empty = False
+towncrier_draft_working_directory = PROJECT_ROOT_DIR
 
-tag = get_tag()
-tag_sha = get_sha(tag)
-head_sha = get_sha("HEAD")
-on_tag = tag and head_sha is not None and head_sha == tag_sha
-
-context = {
-    "current_version": release,
-    "version_slug": release,
-    "versions": versions,
-    "single_version": False,
-    "github_host": "github.com",
-    "github_user": "MobileTeleSystems",
-    "github_repo": "horizon-hwm-store",
-    "github_version": version if on_tag else "master",
-    "conf_py_path": "/docs/",  # префикс для путей к файлам
-    "display_github": True,
-    "commit": head_sha[:7] if head_sha is not None else None,
-}
-
-if "html_context" in globals():
-    html_context.update(context)
-
-else:
-    html_context = context
+github_username = "MobileTeleSystems"
+github_repository = "horizon-hwm-store"
