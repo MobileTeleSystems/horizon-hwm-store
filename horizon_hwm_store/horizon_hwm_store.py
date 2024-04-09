@@ -157,7 +157,7 @@ class HorizonHWMStore(BaseHWMStore):
     def client(self) -> HorizonClientSync:
         if not self._client:
             self._client = HorizonClientSync(  # noqa: WPS601
-                base_url=self.api_url,
+                base_url=str(self.api_url),
                 auth=self.auth,
                 retry=self.retry,
                 timeout=self.timeout,
