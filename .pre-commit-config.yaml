@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-ast
       - id: check-case-conflict
@@ -49,7 +49,7 @@ repos:
         args: [-w]
 
   - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-    rev: v2.12.0
+    rev: v2.13.0
     hooks:
       - id: pretty-format-yaml
         args: [--autofix, --indent, '2', --offset, '2']
@@ -82,6 +82,11 @@ repos:
       - id: pyupgrade
         args: [--py37-plus, --keep-runtime-typing]
 
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v3.1.0
+    hooks:
+      - id: add-trailing-comma
+
   - repo: https://github.com/pycqa/bandit
     rev: 1.7.8
     hooks:
@@ -93,7 +98,7 @@ repos:
         require_serial: true
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.3.0
+    rev: 24.4.2
     hooks:
       - id: black
 

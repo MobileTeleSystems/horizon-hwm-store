@@ -57,8 +57,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-python-${{ matrix.python-version }}-pydantic-${{ matrix.pydantic-version}}-tests-${{ hashFiles('requirements*.txt') }}
             ${{ runner.os }}-python-${{ matrix.python-version }}-pydantic-${{ matrix.pydantic-version}}-tests-
-            ${{ runner.os }}-python
-            ${{ runner.os }}-
+            ${{ runner.os }}-python-
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip setuptools wheel
