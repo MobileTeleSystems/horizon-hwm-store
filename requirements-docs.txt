@@ -4,6 +4,7 @@ numpydoc
 sphinx
 sphinx-copybutton
 sphinx-favicon
+sphinx-last-updated-by-git
 sphinx-toolbox
 sphinxcontrib-towncrier
 towncrier

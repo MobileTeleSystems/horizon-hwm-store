@@ -54,6 +54,7 @@ extensions = [
     "sphinx_favicon",
     "sphinx_toolbox.github",
     "sphinxcontrib.towncrier",  # provides `towncrier-draft-entries` directive
+    "sphinx_last_updated_by_git",
 ]
 numpydoc_show_class_members = True
 autodoc_pydantic_model_show_config = False
@@ -84,9 +85,7 @@ html_theme = "furo"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 html_extra_path = ["robots.txt"]
-favicons = [
-    {"rel": "icon", "href": "icon.svg", "type": "image/svg+xml"},
-]
+
 # The master toctree document.
 master_doc = "index"
 
