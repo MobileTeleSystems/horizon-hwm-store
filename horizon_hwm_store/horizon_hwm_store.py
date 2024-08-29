@@ -79,7 +79,7 @@ class HorizonHWMStore(BaseHWMStore):
             connection=postgres,
             source="public.mydata",
             columns=["id", "data"],
-            hwm=DBReader.AutoDetectHWM(hwm="some_unique_hwm_name", expression="id"),
+            hwm=DBReader.AutoDetectHWM(name="some_unique_hwm_name", expression="id"),
         )
 
         writer = DBWriter(connection=hive, target="newtable")
