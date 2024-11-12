@@ -83,6 +83,8 @@ jobs:
         with:
           name: coverage-python-${{ matrix.python-version }}-pydantic-${{ matrix.pydantic-version }}-os-${{ matrix.os }}
           path: reports/*
+          # https://github.com/actions/upload-artifact/issues/602
+          include-hidden-files: true
 
       - name: Shutdown Backend Container
         if: always()
@@ -125,10 +127,9 @@ jobs:
       - name: Download all coverage reports
         uses: actions/download-artifact@v4
         with:
-          path: reports
-
-      - name: Move coverage data to the root folder
-        run: find reports -type f -exec mv '{}' reports \;
+          path: reports/
+          pattern: coverage-*
+          merge-multiple: true
 
       - name: Generate coverate reports
         run: ./combine_coverage.sh
@@ -139,8 +140,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./reports/coverage.xml
           fail_ci_if_error: true
-        # TODO: remove after fixing https://github.com/codecov/codecov-cli/issues/367
-          plugin: gcov
+          plugin: noop
 
       - name: All done
         run: echo 1
