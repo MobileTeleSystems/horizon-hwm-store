@@ -88,13 +88,13 @@ HORIZON_NAMESPACE = os.environ.get("HORIZON_NAMESPACE")
                 # no topic
                 expression="offset",
                 value={
-                    "0": 100,
-                    "1": 123,
+                    0: 100,
+                    1: 123,
                 },
             ),
             {
-                "0": 110,
-                "1": 150,
+                0: 110,
+                1: 150,
             },
         ),
         (
@@ -103,13 +103,13 @@ HORIZON_NAMESPACE = os.environ.get("HORIZON_NAMESPACE")
                 topic="topic_name",
                 expression="offset",
                 value={
-                    "0": 100,
-                    "1": 123,
+                    0: 100,
+                    1: 123,
                 },
             ),
             {
-                "0": 110,
-                "1": 150,
+                0: 110,
+                1: 150,
             },
         ),
     ],

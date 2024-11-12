@@ -1,2 +1,2 @@
 data-horizon[client-sync]>=1.0.0,<1.1
-etl-entities>=2.1.0,<2.4.0
+etl-entities>=2.1.0,<2.5.0
