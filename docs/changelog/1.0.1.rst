@@ -1,4 +1,4 @@
 1.0.1 (2024-11-12)
 ==================
 
-Allow using ``etl-entities==2.4.0``.
+Allow using `etl-entities==2.4.0 <https://github.com/MobileTeleSystems/etl-entities/releases/tag/2.4.0>`_.
