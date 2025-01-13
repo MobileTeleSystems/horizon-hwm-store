@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DEFAULT_PYTHON: '3.12'
+  DEFAULT_PYTHON: '3.13'
 
 jobs:
   tests:
@@ -27,7 +27,7 @@ jobs:
             pydantic-version: '1'
             os: ubuntu-latest
 
-          - python-version: '3.12'
+          - python-version: '3.13'
             pydantic-version: '2'
             os: ubuntu-latest
 
