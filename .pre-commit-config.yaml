@@ -39,11 +39,11 @@ repos:
         args:
           - --license-filepath
           - .spdx-license-header.txt
-          - --use-current-year
+          - --allow-past-years
           - --no-extra-eol
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.3.0
+    rev: v2.4.0
     hooks:
       - id: codespell
         args: [-w]
@@ -77,7 +77,7 @@ repos:
       - id: text-unicode-replacement-char
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.19.0
+    rev: v3.19.1
     hooks:
       - id: pyupgrade
         args: [--py37-plus, --keep-runtime-typing]
@@ -88,7 +88,7 @@ repos:
       - id: add-trailing-comma
 
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.10
+    rev: 1.8.2
     hooks:
       - id: bandit
         args:
@@ -115,12 +115,12 @@ repos:
       - id: blacken-docs
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 6.0.0
     hooks:
       - id: isort
 
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.10
+    rev: 1.8.2
     hooks:
       - id: bandit
         args:

@@ -14,8 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # flake8-commas is failing on Python 3.12
-  DEFAULT_PYTHON: '3.11'
+  DEFAULT_PYTHON: '3.13'
 
 jobs:
   linters:
@@ -51,6 +50,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -I -r requirements.txt -r requirements-dev.txt
+          pip install -U flake8-commas
 
       - name: Run flake8
         run: python3 -m flake8 --config setup.cfg .

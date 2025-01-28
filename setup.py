@@ -1,5 +1,3 @@
-# SPDX-FileCopyrightText: 2023-2024 MTS PJSC
-# SPDX-License-Identifier: Apache-2.0
 from __future__ import annotations
 
 import os
@@ -46,7 +44,7 @@ setup(
     license_files=("LICENSE.txt",),
     url="https://github.com/MobileTeleSystems/horizon-hwm-store",
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
@@ -58,6 +56,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Software Development :: Libraries",
         "Typing :: Typed",
     ],
