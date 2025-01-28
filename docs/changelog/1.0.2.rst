@@ -1,0 +1,7 @@
+1.0.2 (2025-01-28)
+==================
+
+Features
+--------
+
+- Allow using `etl-entities==2.5.0 <https://github.com/MobileTeleSystems/etl-entities/releases/tag/2.5.0>`_. (:github:pull:`40`)
