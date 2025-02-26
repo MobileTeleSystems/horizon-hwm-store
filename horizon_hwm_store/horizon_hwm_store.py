@@ -8,11 +8,14 @@ from etl_entities.hwm import HWM, HWMTypeRegistry
 from etl_entities.hwm_store import BaseHWMStore, register_hwm_store_class
 from horizon.client.auth import LoginPassword
 from horizon.client.sync import HorizonClientSync, RetryConfig, TimeoutConfig
+from horizon.commons.exceptions import EntityAlreadyExistsError
 from horizon.commons.schemas.v1 import (
     HWMCreateRequestV1,
     HWMPaginateQueryV1,
     HWMUpdateRequestV1,
+    NamespaceCreateRequestV1,
     NamespacePaginateQueryV1,
+    NamespaceResponseV1,
 )
 
 try:
@@ -33,7 +36,7 @@ class HorizonHWMStore(BaseHWMStore):
 
     .. warning::
 
-        It is required to create namespace in Horizon BEFORE using this class.
+        It is required to create a namespace BEFORE working with HWMs.
 
     Parameters
     ----------
@@ -98,7 +101,7 @@ class HorizonHWMStore(BaseHWMStore):
             namespace="namespace",
             retry=RetryConfig(total=5),
             timeout=TimeoutConfig(request_timeout=10),
-        ):
+        ).force_create_namespace():
             with IncrementalStrategy():
                 df = reader.run()
                 writer.run(df)
@@ -213,6 +216,24 @@ class HorizonHWMStore(BaseHWMStore):
         self._get_namespace_id()
         return self
 
+    def force_create_namespace(self) -> HorizonHWMStore:
+        """
+        Create a namespace with name specified in HorizonHWMStore class.
+
+        Returns
+        -------
+        HorizonHWMStore
+            Self
+        """
+        namespace = self._get_namespace(self.namespace)
+        if namespace is None:
+            try:
+                namespace = self.client.create_namespace(NamespaceCreateRequestV1(name=self.namespace))
+                self._namespace_id = namespace.id  # noqa: WPS601
+            except EntityAlreadyExistsError:
+                ...
+        return self
+
     # LoginPassword, RetryConfig and TimeoutConfig can be inherited from Pydantic v2 BaseModel
     # which is detected by Pydantic v1 as arbitrary type. So we need to parse them manually.
     @validator("auth", pre=True)
@@ -233,6 +254,10 @@ class HorizonHWMStore(BaseHWMStore):
             return TimeoutConfig.parse_obj(value)
         return value
 
+    def _get_namespace(self, name: str) -> NamespaceResponseV1 | None:
+        namespaces = self.client.paginate_namespaces(query=NamespacePaginateQueryV1(name=name)).items
+        return namespaces[0] if namespaces else None
+
     def _get_namespace_id(self) -> int:
         """
         Fetch the ID of the namespace. Raises an exception if the namespace doesn't exist.
@@ -250,11 +275,14 @@ class HorizonHWMStore(BaseHWMStore):
         if self._namespace_id is not None:
             return self._namespace_id
 
-        namespaces = self.client.paginate_namespaces(NamespacePaginateQueryV1(name=self.namespace)).items
-        if not namespaces:
-            raise RuntimeError(f"Namespace {self.namespace!r} not found. Please create it before using.")
+        namespace = self._get_namespace(self.namespace)
+        if namespace is None:
+            raise RuntimeError(
+                f"Namespace {self.namespace!r} not found. "
+                "Please create it before using by calling .force_create_namespace() method.",
+            )
 
-        self._namespace_id = namespaces[0].id  # noqa: WPS601
+        self._namespace_id = namespace.id  # noqa: WPS601
         return self._namespace_id
 
     def _get_hwm_id(self, namespace_id: int, hwm_name: str) -> Optional[int]:
