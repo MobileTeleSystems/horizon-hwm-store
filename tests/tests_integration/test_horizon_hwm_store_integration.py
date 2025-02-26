@@ -14,8 +14,8 @@ HORIZON_PASSWORD = os.environ.get("HORIZON_PASSWORD")
 HORIZON_NAMESPACE = os.environ.get("HORIZON_NAMESPACE")
 
 
-def test_hwm_store_integration(hwm_store, hwm_new_value, ensure_namespace):
-    hwm, new_value = hwm_new_value
+def test_hwm_store_integration(hwm_store, hwm_new_values, ensure_namespace):
+    hwm, new_value = hwm_new_values
     assert hwm_store.get_hwm(hwm.name) is None
 
     hwm_store.set_hwm(hwm)
@@ -65,3 +65,19 @@ def test_hwm_store_unexisting_namespace(hwm_new_value):
 
     with pytest.raises(RuntimeError, match=error_msg):
         store.set_hwm(hwm)
+
+
+def test_hwm_store_creates_namespace():
+    namespace_name = "new_namespace"
+    store = HorizonHWMStore(
+        api_url=HORIZON_URL,
+        auth=LoginPassword(login=HORIZON_USER, password=HORIZON_PASSWORD),
+        namespace=namespace_name,
+    )
+    error_msg = "Namespace 'new_namespace' not found. Please create it before using."
+
+    with pytest.raises(RuntimeError, match=error_msg):
+        store.get_hwm("some_hwm_name")
+
+    store.force_create_namespace()
+    assert store.get_hwm("some_hwm_name") is None

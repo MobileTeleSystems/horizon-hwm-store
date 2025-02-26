@@ -1,0 +1,1 @@
+Add ``force_create_namespace`` method

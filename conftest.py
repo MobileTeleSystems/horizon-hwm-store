@@ -15,7 +15,6 @@ from etl_entities.hwm import (
     KeyValueIntHWM,
 )
 from horizon.client.auth import LoginPassword
-from horizon.commons.schemas.v1 import NamespaceCreateRequestV1
 from packaging.version import Version
 
 from horizon_hwm_store import HorizonHWMStore
@@ -149,6 +148,11 @@ if Version(etl_entities.__version__) >= Version("2.5.0"):
 
 
 @pytest.fixture(params=HWMS_WITH_VALUE)
+def hwm_new_values(request):
+    return request.param
+
+
+@pytest.fixture(params=[HWMS_WITH_VALUE[0]])
 def hwm_new_value(request):
     return request.param
 
@@ -164,16 +168,9 @@ def hwm_store():
 
 @pytest.fixture(scope="module")
 def ensure_namespace():
-    from requests.exceptions import HTTPError
 
-    store = HorizonHWMStore(
+    HorizonHWMStore(
         api_url=HORIZON_URL,
         auth=LoginPassword(login=HORIZON_USER, password=HORIZON_PASSWORD),
         namespace=HORIZON_NAMESPACE,
-    )
-
-    try:
-        store.client.create_namespace(NamespaceCreateRequestV1(name=HORIZON_NAMESPACE))  # noqa: WPS437
-    except HTTPError:
-        # exception: 409 Client Error: Conflict for url: http://horizon/v1/namespaces/ - namespace already exists
-        pass
+    ).force_create_namespace()
