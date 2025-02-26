@@ -1,0 +1,10 @@
+
+
+
+1.1.0 (2025-02-26)
+==================
+
+Features
+--------
+
+- Add ``force_create_namespace`` method (:github:pull:`44`)
