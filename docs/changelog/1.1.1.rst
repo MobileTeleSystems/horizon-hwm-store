@@ -4,4 +4,4 @@
 Dependencies
 ------------
 
-- Allow using ``data-horizon`` 1.1.1+
+Allow using ``data-horizon`` 1.1.1+
