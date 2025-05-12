@@ -44,7 +44,7 @@ jobs:
       - name: Start Backend Container
         run: |
           docker compose down -v --remove-orphans
-          docker compose up --wait-timeout 5 -d
+          docker compose up --wait-timeout 60 -d
         env:
           COMPOSE_PROJECT_NAME: ${{ github.run_id }}-backend
 
