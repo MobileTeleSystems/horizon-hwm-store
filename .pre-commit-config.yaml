@@ -88,7 +88,7 @@ repos:
       - id: add-trailing-comma
 
   - repo: https://github.com/pycqa/bandit
-    rev: 1.8.3
+    rev: 1.8.4
     hooks:
       - id: bandit
         args:
@@ -120,7 +120,7 @@ repos:
       - id: isort
 
   - repo: https://github.com/pycqa/bandit
-    rev: 1.8.3
+    rev: 1.8.4
     hooks:
       - id: bandit
         args:
