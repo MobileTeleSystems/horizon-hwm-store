@@ -231,7 +231,7 @@ class HorizonHWMStore(BaseHWMStore):
                 namespace = self.client.create_namespace(NamespaceCreateRequestV1(name=self.namespace))
                 self._namespace_id = namespace.id  # noqa: WPS601
             except EntityAlreadyExistsError:
-                ...
+                namespace = self._get_namespace(self.namespace)
         return self
 
     # LoginPassword, RetryConfig and TimeoutConfig can be inherited from Pydantic v2 BaseModel
