@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, cast
 
 from etl_entities.hwm import HWM, HWMTypeRegistry
 from etl_entities.hwm_store import BaseHWMStore, register_hwm_store_class
@@ -232,6 +232,8 @@ class HorizonHWMStore(BaseHWMStore):
                 self._namespace_id = namespace.id  # noqa: WPS601
             except EntityAlreadyExistsError:
                 namespace = self._get_namespace(self.namespace)
+                namespace = cast("NamespaceResponseV1", namespace)
+                self._namespace_id = namespace.id  # noqa: WPS601
         return self
 
     # LoginPassword, RetryConfig and TimeoutConfig can be inherited from Pydantic v2 BaseModel
