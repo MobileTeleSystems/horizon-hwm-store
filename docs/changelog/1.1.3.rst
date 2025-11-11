@@ -1,0 +1,7 @@
+1.1.3 (2025-11-11)
+==================
+
+Bug fixes
+---------
+
+Method ``force_create_namespace`` now properly handles parallel namespace creation instead of returning ``None``.

@@ -27,9 +27,9 @@ Horizon HWM Store
 .. |CI Status| image:: https://github.com/MobileTeleSystems/horizon-hwm-store/workflows/Tests/badge.svg
     :alt: Github Actions - latest CI build status
     :target: https://github.com/MobileTeleSystems/horizon-hwm-store/actions
-.. |Test Coverage| image:: https://codecov.io/gh/MobileTeleSystems/horizon-hwm-store/branch/develop/graph/badge.svg?token=WJA6IN16SS
-    :alt: Test coverage - percent
-    :target: https://codecov.io/gh/MobileTeleSystems/horizon-hwm-store
+.. |Test Coverage| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/
+    MTSOnGithub/03e73a82ecc4709934540ce8201cc3b4/raw/horizon-hwm-store_badge.json
+    :target: https://github.com/MobileTeleSystems/horizon-hwm-store/actions
 .. |pre-commit.ci Status| image:: https://results.pre-commit.ci/badge/github/MobileTeleSystems/horizon-hwm-store/develop.svg
     :alt: pre-commit.ci - status
     :target: https://results.pre-commit.ci/latest/github/MobileTeleSystems/horizon-hwm-store/develop
