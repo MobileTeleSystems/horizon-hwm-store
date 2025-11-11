@@ -231,8 +231,7 @@ class HorizonHWMStore(BaseHWMStore):
                 namespace = self.client.create_namespace(NamespaceCreateRequestV1(name=self.namespace))
                 self._namespace_id = namespace.id  # noqa: WPS601
             except EntityAlreadyExistsError:
-                namespace = self._get_namespace(self.namespace)
-                namespace = cast("NamespaceResponseV1", namespace)
+                namespace = cast("NamespaceResponseV1", self._get_namespace(self.namespace))
                 self._namespace_id = namespace.id  # noqa: WPS601
         return self
 
